@@ -1,0 +1,103 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// 单链表节点结构体
+typedef struct SingleListNode {
+    int data;
+    struct SingleListNode* next;
+} SingleListNode;
+
+// 单链表结构体
+typedef struct SingleLinkedList {
+    SingleListNode* head;
+} SingleLinkedList;
+
+// 创建单链表
+SingleLinkedList* create_single_linked_list() {
+    SingleLinkedList* list = (SingleLinkedList*)malloc(sizeof(SingleLinkedList));
+    list->head = NULL;
+    return list;
+}
+
+// 在链表末尾插入元素
+void append(SingleLinkedList* list, int data) {
+    SingleListNode* new_node = (SingleListNode*)malloc(sizeof(SingleListNode));
+    new_node->data = data;
+    new_node->next = NULL;
+
+    if (list->head == NULL) {
+        list->head = new_node;
+    } else {
+        SingleListNode* current = list->head;
+        while (current->next != NULL) {
+            current = current->next;
+        }
+        current->next = new_node;
+    }
+}
+
+// 在链表头部插入元素
+void prepend(SingleLinkedList* list, int data) {
+    SingleListNode* new_node = (SingleListNode*)malloc(sizeof(SingleListNode));
+    new_node->data = data;
+    new_node->next = list->head;
+    list->head = new_node;
+}
+
+// 删除指定值的节点
+void delete(SingleLinkedList* list, int data) {
+    if (list->head == NULL) {
+        return;
+    }
+
+    if (list->head->data == data) {
+        SingleListNode* temp = list->head;
+        list->head = list->head->next;
+        free(temp);
+        return;
+    }
+
+    SingleListNode* current = list->head;
+    while (current->next != NULL) {
+        if (current->next->data == data) {
+            SingleListNode* temp = current->next;
+            current->next = current->next->next;
+            free(temp);
+            return;
+        }
+        current = current->next;
+    }
+}
+
+// 查找指定值的节点是否存在
+int search(SingleLinkedList* list, int data) {
+    SingleListNode* current = list->head;
+    while (current != NULL) {
+        if (current->data == data) {
+            return 1;
+        }
+        current = current->next;
+    }
+    return 0;
+}
+
+// 打印链表
+void display(SingleLinkedList* list) {
+    SingleListNode* current = list->head;
+    while (current != NULL) {
+        printf("%d -> ", current->data);
+        current = current->next;
+    }
+    printf("NULL\n");
+}
+
+// 销毁链表
+void destroy(SingleLinkedList* list) {
+    SingleListNode* current = list->head;
+    while (current != NULL) {
+        SingleListNode* temp = current;
+        current = current->next;
+        free(temp);
+    }
+    free(list);
+}

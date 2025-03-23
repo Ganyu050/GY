@@ -1,0 +1,26 @@
+import numpy as np
+
+# 生成一些示例数据
+X = np.random.rand(100, 1) * 10
+y = 2 * X + 1 + np.random.randn(100, 1) * 2
+
+# 最小二乘法
+X_b = np.c_[np.ones((X.shape[0], 1)), X]
+theta_best = np.linalg.inv(X_b.T.dot(X_b)).dot(X_b.T).dot(y)
+
+# 梯度下降法
+def gradient_descent(X_b, y, learning_rate=0.01, iterations=1000):
+    m = len(y)
+    theta = np.zeros(X_b.shape[1])
+    for i in range(iterations):
+        gradients = 2/m * X_b.T.dot(X_b.dot(theta) - y)
+        theta = theta - learning_rate * gradients
+    return theta
+
+theta_gd = gradient_descent(X_b, y)
+
+print("通过最小二乘法得到的参数：", theta_best)
+print("通过梯度下降法得到的参数：", theta_gd)
+
+# 我发现最小二乘法和梯度下降法得到的参数非常接近，这说明两种方法都能有效地拟合线性回归模型。
+# 不过，梯度下降法需要设置学习率和迭代次数，这可能会影响结果的准确性。

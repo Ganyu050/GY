@@ -1,0 +1,110 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// 双向链表节点结构体
+typedef struct DoubleListNode {
+    int data;
+    struct DoubleListNode* prev;
+    struct DoubleListNode* next;
+} DoubleListNode;
+
+// 双向链表结构体
+typedef struct DoubleLinkedList {
+    DoubleListNode* head;
+} DoubleLinkedList;
+
+// 创建双向链表
+DoubleLinkedList* create_double_linked_list() {
+    DoubleLinkedList* list = (DoubleLinkedList*)malloc(sizeof(DoubleLinkedList));
+    list->head = NULL;
+    return list;
+}
+
+// 在链表末尾插入元素
+void append(DoubleLinkedList* list, int data) {
+    DoubleListNode* new_node = (DoubleListNode*)malloc(sizeof(DoubleListNode));
+    new_node->data = data;
+    new_node->prev = NULL;
+    new_node->next = NULL;
+
+    if (list->head == NULL) {
+        list->head = new_node;
+    } else {
+        DoubleListNode* current = list->head;
+        while (current->next != NULL) {
+            current = current->next;
+        }
+        current->next = new_node;
+        new_node->prev = current;
+    }
+}
+
+// 在链表头部插入元素
+void prepend(DoubleLinkedList* list, int data) {
+    DoubleListNode* new_node = (DoubleListNode*)malloc(sizeof(DoubleListNode));
+    new_node->data = data;
+    new_node->prev = NULL;
+    new_node->next = list->head;
+
+    if (list->head != NULL) {
+        list->head->prev = new_node;
+    }
+    list->head = new_node;
+}
+
+// 删除指定值的节点
+void delete(DoubleLinkedList* list, int data) {
+    if (list->head == NULL) {
+        return;
+    }
+
+    DoubleListNode* current = list->head;
+    while (current != NULL) {
+        if (current->data == data) {
+            if (current->prev != NULL) {
+                current->prev->next = current->next;
+            } else {
+                list->head = current->next;
+            }
+            if (current->next != NULL) {
+                current->next->prev = current->prev;
+            }
+            free(current);
+            return;
+        }
+        current = current->next;
+    }
+}
+
+// 查找指定值的节点是否存在
+int search(DoubleLinkedList* list, int data) {
+    DoubleListNode* current = list->head;
+    while (current != NULL) {
+        if (current->data == data) {
+            return 1;
+        }
+        current = current->next;
+    }
+    return 0;
+}
+
+// 打印链表
+void display(DoubleLinkedList* list) {
+    DoubleListNode* current = list->head;
+    while (current != NULL) {
+        printf("%d <-> ", current->data);
+        current = current->next;
+    }
+    printf("NULL\n");
+}
+
+// 销毁链表
+void destroy(DoubleLinkedList* list) {
+    DoubleListNode* current = list->head;
+    while (current != NULL) {
+        DoubleListNode* temp = current;
+        current = current->next;
+        free(temp);
+    }
+    free(list);
+}

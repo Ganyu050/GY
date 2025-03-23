@@ -1,0 +1,17 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# 加载数据集
+url = "https://archive.ics.uci.edu/ml/machine-learning-databases/housing/housing.data"
+column_names = [
+    "CRIM", "ZN", "INDUS", "CHAS", "NOX", "RM", "AGE", "DIS", "RAD", "TAX", "PTRATIO", "B", "LSTAT", "MEDV"
+]
+data = pd.read_csv(url, header=None, names=column_names)
+
+# 查看数据基本信息
+print(data.info())
+print(data.describe())
+
+# 数据可视化
+data.hist(bins=50, figsize=(20, 15))
+plt.show()
